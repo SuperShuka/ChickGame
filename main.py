@@ -9,8 +9,8 @@ pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
 chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
-chickjumpright = pygame.image.load('Assets/Images/chickjumpleft.png')
-chickjumpleft = pygame.image.load('Assets/Images/chickjumpright.png')
+chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
+chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png')
 chickrunleft = pygame.image.load('Assets/Images/chickrunleft.png')
 chickrunright = pygame.image.load('Assets/Images/chickrunright.png')
 
@@ -19,36 +19,20 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
+FPS = 60
+clock = pygame.time.Clock()
 
-ground = 50
-jump_height = 50
+x = W//2
+y = H-50
+chickimage = chickright
+xspeed = 0
+yspeed = 0
+ground = H-50
+jump_height = 100
 chickturn = 0
+runanim = 0
 
 hero = pygame.Surface((42, 46))
-
-
-def move(x, y, xspeed, yspeed, chickimage):
-    keys = pygame.key.get_pressed()
-    hrect = hero.get_rect(bottom=(x, y))
-    if keys[pygame.K_SPACE] and ground == hrect.bottom:
-        yspeed = jump_height
-    if yspeed > 0:
-        if chickturn == 1:
-            chickimage = chickjumpright
-        else:
-            chickimage = chickjumpleft
-        y += 1
-        yspeed -= 1
-    if y > ground:
-        if chickturn == 1:
-            chickimage = chickjumpright
-        else:
-            chickimage = chickjumpleft
-
-
-
-FPS = 90
-clock = pygame.time.Clock()
 
 while True:
     for event in pygame.event.get():
@@ -56,5 +40,45 @@ while True:
             exit()
         if event.type == pygame.K_ESCAPE:
             exit()
+
+    keys = pygame.key.get_pressed()
+    hrect = hero.get_rect(bottomleft=(x, y))
+    "Обрабатываем прыжок и полёт"
+    if keys[pygame.K_SPACE] and ground == hrect.bottom:
+        yspeed = jump_height
+    if yspeed > 0:
+        if chickturn == 0:
+            chickimage = chickjumpright
+        else:
+            chickimage = chickjumpleft
+        yspeed = 50
+    if y < ground and yspeed == 0:
+        if chickturn == 0:
+            chickimage = chickjumpright
+        else:
+            chickimage = chickjumpleft
+        if keys[pygame.K_SPACE]:
+            yspeed = -2
+        else:
+            yspeed = -5
+    "Фиксим проваливание под землю"
+    if y > ground:
+        y = ground
+    "Двигаем по Y"
+    if yspeed > 0:
+        y -= 5
+        yspeed -= 5
+    if yspeed < 0:
+        if keys[pygame.K_SPACE]:
+            yspeed = -2
+        else:
+            yspeed = -5
+
+    "Отладка"
+    print(y, ground)
+
+    sc.fill(BLACK)
+    sc.blit(chickimage, hrect)
+    pygame.display.update()
 
     clock.tick(FPS)
