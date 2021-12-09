@@ -35,7 +35,7 @@ chickimage = chickright
 jumpmove = 0
 springmove = 0
 ground = H-50
-jump_height = 50
+jump_height = 100
 chickturn = 0
 runanim = 0
 flyanim = 0
@@ -53,37 +53,27 @@ while True:
     hrect = hero.get_rect(bottomleft=(x, y))
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
-        yspeed = jump_height
-    if yspeed > 0:
-        if chickturn == 0:
-            chickimage = chickjumpright
-        else:
-            chickimage = chickjumpleft
-        yspeed = 50
-    if y < ground and yspeed == 0:
-        if chickturn == 0:
-            chickimage = chickjumpright
-        else:
-            chickimage = chickjumpleft
+        jumpmove = jump_height
+    if y < ground and jumpmove == 0 and springmove == 0:
         if keys[pygame.K_SPACE]:
-            yspeed = -2
+            y += 2
         else:
-            yspeed = -5
+            y += 5
     "Фиксим проваливание под землю"
     if y > ground:
         y = ground
     "Двигаем по Y"
-    if yspeed > 0:
+    if jumpmove > 0:
         y -= 5
-        yspeed -= 5
-    if yspeed < 0:
-        if keys[pygame.K_SPACE]:
-            yspeed = -2
-        else:
-            yspeed = -5
-
+        jumpmove -= 5
     "Отладка"
-    print(y, ground, yspeed)
+    print(y, ground, jumpmove)
+
+    if keys[pygame.K_a]:
+
+
+    "Анимация"
+
 
     sc.fill(BLACK)
     sc.blit(chickimage, hrect)
