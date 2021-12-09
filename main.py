@@ -13,6 +13,13 @@ chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
 chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png')
 chickrunleft = pygame.image.load('Assets/Images/chickrunleft.png')
 chickrunright = pygame.image.load('Assets/Images/chickrunright.png')
+flyleft1 = pygame.image.load('Assets/Images/chickflyleftst1.png')
+flyleft2 = pygame.image.load('Assets/Images/chickflyleftst2.png')
+flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
+flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
+flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
+flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
+
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -25,12 +32,13 @@ clock = pygame.time.Clock()
 x = W//2
 y = H-50
 chickimage = chickright
-xspeed = 0
-yspeed = 0
+jumpmove = 0
+springmove = 0
 ground = H-50
-jump_height = 100
+jump_height = 50
 chickturn = 0
 runanim = 0
+flyanim = 0
 
 hero = pygame.Surface((42, 46))
 
@@ -75,7 +83,7 @@ while True:
             yspeed = -5
 
     "Отладка"
-    print(y, ground)
+    print(y, ground, yspeed)
 
     sc.fill(BLACK)
     sc.blit(chickimage, hrect)
