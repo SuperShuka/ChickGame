@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
 
-W = 1500
-H = 1000
+W = 1000
+H = 800
 sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
@@ -34,6 +34,7 @@ y = H-50
 chickimage = chickright
 jumpmove = 0
 springmove = 0
+speed = 5
 ground = H-50
 jump_height = 100
 chickturn = 0
@@ -54,6 +55,7 @@ while True:
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
         jumpmove = jump_height
+    "Падение"
     if y < ground and jumpmove == 0 and springmove == 0:
         if keys[pygame.K_SPACE]:
             y += 2
@@ -67,9 +69,36 @@ while True:
         y -= 5
         jumpmove -= 5
     "Отладка"
-    print(y, ground, jumpmove)
-    "if keys[pygame.K_a]:"
+    print(y, x, ground, jumpmove)
+
+    "Движение по X"
+    if keys[pygame.K_a] and keys[pygame.K_d]:
+        x = x
+        running = False
+    elif keys[pygame.K_a]:
+        x -= speed
+        chickturn = False
+        running = True
+    elif keys[pygame.K_d]:
+        x += speed
+        chickturn = True
+        running = True
+    else:
+        running = False
+
     "Анимация"
+    if hrect.bottom == ground:
+        if running:
+            if chickturn:
+                chickimage = chickrunright
+            else:
+                chickimage = chickrunleft
+        else:
+            if chickturn:
+                chickimage = chickright
+            else:
+                chickimage = chickleft
+
     sc.fill(BLACK)
     sc.blit(chickimage, hrect)
     pygame.display.update()
