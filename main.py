@@ -90,11 +90,17 @@ while True:
         x = x
         running = False
     elif keys[pygame.K_a]:
-        x -= speed
+        if hrect.bottom == ground:
+            x -= speed
+        else:
+            x -= speed/2
         chickturnr = False
         running = True
     elif keys[pygame.K_d]:
-        x += speed
+        if hrect.bottom == ground:
+            x += speed
+        else:
+            x += speed/2
         chickturnr = True
         running = True
     else:
