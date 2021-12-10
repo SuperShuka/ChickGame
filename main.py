@@ -102,7 +102,7 @@ while True:
 
     "Анимация"
     # При беге
-    if hrect.bottom == ground:
+    if hrect.bottom == ground and not keys[pygame.K_SPACE]:
         if running:
             if chickturnr:
                 chickimage = chickrunright
