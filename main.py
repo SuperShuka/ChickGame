@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
 
-W = 1500
-H = 1000
+W = 800
+H = 600
 sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
