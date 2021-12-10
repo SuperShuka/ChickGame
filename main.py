@@ -68,13 +68,8 @@ while True:
         jumpmove -= 5
     "Отладка"
     print(y, ground, jumpmove)
-
-    if keys[pygame.K_a]:
-
-
+    "if keys[pygame.K_a]:"
     "Анимация"
-
-
     sc.fill(BLACK)
     sc.blit(chickimage, hrect)
     pygame.display.update()
