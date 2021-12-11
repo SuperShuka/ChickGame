@@ -21,6 +21,7 @@ flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
 flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
 flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
 flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
+islepict = pygame.image.load('Assets/Images/isle1.png')
 
 
 WHITE = (255, 255, 255)
@@ -37,6 +38,7 @@ chickimage = chickright
 jumpmove = 0
 springmove = 0
 speed = 5
+gravity = 6
 ground = H-50
 jump_height = 200
 chickturnr = 0
@@ -45,6 +47,9 @@ flyanim = 1
 jumpspeed = 10
 
 hero = pygame.Surface((42, 46))
+chicklegs = pygame.Surface((10, 1))
+island = pygame.Surface((100, 50))
+island.blit(islepict, (0, 0))
 
 while True:
     for event in pygame.event.get():
@@ -54,16 +59,23 @@ while True:
             exit()
 
     keys = pygame.key.get_pressed()
+    islerect = island.get_rect(bottomleft=(W//2+200, H-100))
     hrect = hero.get_rect(bottomleft=(x, y))
+    legrect = chicklegs.get_rect(bottomleft=(x+15, y+1))
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
         jumpmove = jump_height
     "Падение"
     if y < ground and jumpmove == 0 and springmove == 0:
         if keys[pygame.K_SPACE]:
-            y += 2
+            y += gravity//3
         else:
-            y += 6
+            if ground-jump_height <= 5:
+                y += gravity//6
+            elif ground-jump_height <= 10:
+                y += gravity//3
+            else:
+                y += gravity
     "Фиксим проваливание под землю"
     if y > ground:
         y = ground
@@ -95,15 +107,19 @@ while True:
     elif keys[pygame.K_a]:
         if hrect.bottom == ground:
             x -= speed
-        else:
+        elif keys[pygame.K_SPACE]:
             x -= speed/2
+        else:
+            x -= speed/1.5
         chickturnr = False
         running = True
     elif keys[pygame.K_d]:
         if hrect.bottom == ground:
             x += speed
-        else:
+        elif keys[pygame.K_SPACE]:
             x += speed/2
+        else:
+            x += speed/1.5
         chickturnr = True
         running = True
     else:
@@ -118,14 +134,12 @@ while True:
                     chickimage = chickrunright1
                 else:
                     chickimage = chickrunleft1
-                print(1)
                 runanim += 1
             elif runanim <= 10:
                 if chickturnr:
                     chickimage = chickrunright2
                 else:
                     chickimage = chickrunleft2
-                print(2)
                 runanim += 1
             elif runanim > 10:
                 runanim = 1
@@ -178,7 +192,13 @@ while True:
             else:
                 chickimage = chickjumpleft
 
+    if legrect.colliderect(islerect.x, islerect.y, islerect.w, 10):
+        ground = islerect.top
+    else:
+        ground = H-50
+    print(islerect.x, islerect.y, islerect.w, 1, ground)
     sc.fill(BLACK)
+    sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
     pygame.display.update()
 
