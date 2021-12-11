@@ -11,8 +11,10 @@ chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
 chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
 chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png')
-chickrunleft = pygame.image.load('Assets/Images/chickrunleft.png')
-chickrunright = pygame.image.load('Assets/Images/chickrunright.png')
+chickrunleft1 = pygame.image.load('Assets/Images/chickrunleft1.png')
+chickrunleft2 = pygame.image.load('Assets/Images/chickrunleft2.png')
+chickrunright1 = pygame.image.load('Assets/Images/chickrunright1.png')
+chickrunright2 = pygame.image.load('Assets/Images/chickrunright2.png')
 flyleft1 = pygame.image.load('Assets/Images/chickflyleftst1.png')
 flyleft2 = pygame.image.load('Assets/Images/chickflyleftst2.png')
 flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
@@ -40,6 +42,7 @@ jump_height = 200
 chickturnr = 0
 runanim = 1
 flyanim = 1
+jumpspeed = 10
 
 hero = pygame.Surface((42, 46))
 
@@ -60,27 +63,27 @@ while True:
         if keys[pygame.K_SPACE]:
             y += 2
         else:
-            y += 5
+            y += 6
     "Фиксим проваливание под землю"
     if y > ground:
         y = ground
     "Двигаем по Y"
     if jumpmove > 0:
         if jumpmove < 5:
-            y -= 1
-            jumpmove -= 1
+            y -= jumpspeed//10
+            jumpmove -= jumpspeed//10
         elif jumpmove < 10:
-            y -= 2
-            jumpmove -= 2
+            y -= jumpspeed//5
+            jumpmove -= jumpspeed//5
         elif jumpmove < 25:
-            y -= 5
-            jumpmove -= 5
+            y -= jumpspeed//2
+            jumpmove -= jumpspeed//2
         elif jumpmove < 35:
-            y -= 8
-            jumpmove -= 8
+            y -= jumpspeed*0.8//1
+            jumpmove -= jumpspeed*0.8//1
         else:
-            y -= 10
-            jumpmove -= 10
+            y -= jumpspeed
+            jumpmove -= jumpspeed
 
     if springmove > 0:
         jumpmove = 0
@@ -110,10 +113,22 @@ while True:
     # При беге
     if hrect.bottom == ground and not keys[pygame.K_SPACE]:
         if running:
-            if chickturnr:
-                chickimage = chickrunright
-            else:
-                chickimage = chickrunleft
+            if runanim <= 5:
+                if chickturnr:
+                    chickimage = chickrunright1
+                else:
+                    chickimage = chickrunleft1
+                print(1)
+                runanim += 1
+            elif runanim <= 10:
+                if chickturnr:
+                    chickimage = chickrunright2
+                else:
+                    chickimage = chickrunleft2
+                print(2)
+                runanim += 1
+            elif runanim > 10:
+                runanim = 1
         else:
             if chickturnr:
                 chickimage = chickright
@@ -121,7 +136,7 @@ while True:
                 chickimage = chickleft
     # При полёте
     if not hrect.bottom == ground:
-        if not jumpmove == 0 and not springmove == 0:
+        if not jumpmove == 0 or not springmove == 0:
             if chickturnr:
                 chickimage = chickjumpright
             else:
