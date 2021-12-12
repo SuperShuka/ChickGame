@@ -59,7 +59,7 @@ while True:
             exit()
 
     keys = pygame.key.get_pressed()
-    islerect = island.get_rect(bottomleft=(W//2+200, H-100))
+    islerect = island.get_rect(bottomleft=(W//2+300, H-150))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(bottomleft=(x+15, y+1))
     "Обрабатываем прыжок и полёт"
