@@ -3,6 +3,7 @@ pygame.init()
 
 W = 1000
 H = 750
+
 sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
@@ -92,6 +93,11 @@ class World():
                     img_rect.y = col_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+
+    def draw(self):
+        for tile in self.tile_list:
+            sc.blit(tile[0], tile[1])
+            pygame.draw.rect(sc, (255, 255, 255), tile[1], 2)
 
 
 while True:
@@ -251,6 +257,8 @@ while True:
     sc.fill(BLACK)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
+    world = World(world_data)
+    world.draw()
     pygame.display.update()
 
     clock.tick(FPS)
