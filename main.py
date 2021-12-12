@@ -2,7 +2,7 @@ import pygame
 pygame.init()
 
 W = 1000
-H = 800
+H = 750
 sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
@@ -21,7 +21,7 @@ flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
 flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
 flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
 flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
-islepict = pygame.image.load('Assets/Images/isle1.png')
+islepict = pygame.image.load('Assets/Images/floatingisland.png')
 
 
 WHITE = (255, 255, 255)
@@ -45,11 +45,54 @@ chickturnr = 0
 runanim = 1
 flyanim = 1
 jumpspeed = 10
+tile_size = 50
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 1))
 island = pygame.Surface((100, 50))
 island.blit(islepict, (0, 0))
+world_data = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 1],
+    [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 2, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 7, 0, 5, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 1],
+    [1, 7, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 1],
+    [1, 0, 2, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 2, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 2, 2, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
+
+# сетка
+class World():
+    def __init__(self, data):
+        self.tile_list = []
+
+        dirt = pygame.image.load('Assets/Images/earthblock.png')
+
+        row_count = 0
+        for row in data:
+            col_count = 0
+            for tile in row:
+                if tile == 1:
+                    img = pygame.transform.scale(dirt, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = col_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+
 
 while True:
     for event in pygame.event.get():
@@ -57,6 +100,8 @@ while True:
             exit()
         if event.type == pygame.K_ESCAPE:
             exit()
+
+
 
     keys = pygame.key.get_pressed()
     islerect = island.get_rect(bottomleft=(W//2+300, H-150))
@@ -124,6 +169,12 @@ while True:
         running = True
     else:
         running = False
+
+    # проваливание вправо и влево
+    # if x <= 0:
+    #     x = 0
+    # if x >= 1000:
+    #     x = 1000
 
     "Анимация"
     # При беге
