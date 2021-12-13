@@ -112,7 +112,7 @@ while True:
     keys = pygame.key.get_pressed()
     islerect = island.get_rect(bottomleft=(W//2+300, H-150))
     hrect = hero.get_rect(bottomleft=(x, y))
-    legrect = chicklegs.get_rect(bottomleft=(x+15, y+1))
+    legrect = chicklegs.get_rect(bottomleft=(x+15, y))
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
         jumpmove = jump_height
@@ -126,10 +126,11 @@ while True:
             elif ground-jump_height <= 10:
                 y += gravity//3
             else:
-                y += gravity
-    "Фиксим проваливание под землю"
-    if y > ground:
-        y = ground
+                if y+gravity > ground:
+                    y = ground
+                else:
+                    y += gravity
+    "Фиксить проваливание под землю БОЛЬШЕ НЕ НУЖНО УРАААААА!!!!!!"
     "Двигаем по Y"
     if jumpmove > 0:
         if jumpmove < 5:
@@ -253,7 +254,7 @@ while True:
         ground = islerect.top
     else:
         ground = H-50
-    print(islerect.x, islerect.y, islerect.w, 1, ground)
+
     sc.fill(BLACK)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
