@@ -52,7 +52,7 @@ tile_size = 50
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 1))
-island = pygame.Surface((100, 50))
+island = pygame.Surface((100, 70))
 island.blit(islepict, (0, 0))
 world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -76,7 +76,6 @@ world_data = [
     [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
-
 
 
 while True:
@@ -228,7 +227,7 @@ while True:
             else:
                 chickimage = chickjumpleft
 
-    if legrect.colliderect(islerect.x, islerect.y, islerect.w, 10):
+    if legrect.colliderect(islerect) and legrect.y >= islerect.top.y:
         ground = islerect.top
     else:
         ground = H - 50

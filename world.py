@@ -5,7 +5,8 @@ pygame.init()
 
 tile_size = 50
 
-class World():
+
+class World:
     def __init__(self, data):
         self.tile_list = []
 
