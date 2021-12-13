@@ -1,3 +1,5 @@
+from world import World
+
 import pygame
 pygame.init()
 
@@ -75,29 +77,6 @@ world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
-# сетка
-class World():
-    def __init__(self, data):
-        self.tile_list = []
-
-        dirt = pygame.image.load('Assets/Images/earthblock.png')
-
-        row_count = 0
-        for row in data:
-            col_count = 0
-            for tile in row:
-                if tile == 1:
-                    img = pygame.transform.scale(dirt, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = col_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-
-    def draw(self):
-        for tile in self.tile_list:
-            sc.blit(tile[0], tile[1])
-            pygame.draw.rect(sc, (255, 255, 255), tile[1], 2)
 
 
 while True:
@@ -107,26 +86,25 @@ while True:
         if event.type == pygame.K_ESCAPE:
             exit()
 
-
-
     keys = pygame.key.get_pressed()
-    islerect = island.get_rect(bottomleft=(W//2+300, H-150))
+
+    islerect = island.get_rect(bottomleft=(W // 2 + 300, H - 150))
     hrect = hero.get_rect(bottomleft=(x, y))
-    legrect = chicklegs.get_rect(bottomleft=(x+15, y))
+    legrect = chicklegs.get_rect(bottomleft=(x + 15, y))
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
         jumpmove = jump_height
     "Падение"
     if y < ground and jumpmove == 0 and springmove == 0:
         if keys[pygame.K_SPACE]:
-            y += gravity//3
+            y += gravity // 3
         else:
-            if ground-jump_height <= 5:
-                y += gravity//6
-            elif ground-jump_height <= 10:
-                y += gravity//3
+            if ground - jump_height <= 5:
+                y += gravity // 6
+            elif ground - jump_height <= 10:
+                y += gravity // 3
             else:
-                if y+gravity > ground:
+                if y + gravity > ground:
                     y = ground
                 else:
                     y += gravity
@@ -134,17 +112,17 @@ while True:
     "Двигаем по Y"
     if jumpmove > 0:
         if jumpmove < 5:
-            y -= jumpspeed//10
-            jumpmove -= jumpspeed//10
+            y -= jumpspeed // 10
+            jumpmove -= jumpspeed // 10
         elif jumpmove < 10:
-            y -= jumpspeed//5
-            jumpmove -= jumpspeed//5
+            y -= jumpspeed // 5
+            jumpmove -= jumpspeed // 5
         elif jumpmove < 25:
-            y -= jumpspeed//2
-            jumpmove -= jumpspeed//2
+            y -= jumpspeed // 2
+            jumpmove -= jumpspeed // 2
         elif jumpmove < 35:
-            y -= jumpspeed*0.8//1
-            jumpmove -= jumpspeed*0.8//1
+            y -= jumpspeed * 0.8 // 1
+            jumpmove -= jumpspeed * 0.8 // 1
         else:
             y -= jumpspeed
             jumpmove -= jumpspeed
@@ -160,18 +138,18 @@ while True:
         if hrect.bottom == ground:
             x -= speed
         elif keys[pygame.K_SPACE]:
-            x -= speed/2
+            x -= speed / 2
         else:
-            x -= speed/1.5
+            x -= speed / 1.5
         chickturnr = False
         running = True
     elif keys[pygame.K_d]:
         if hrect.bottom == ground:
             x += speed
         elif keys[pygame.K_SPACE]:
-            x += speed/2
+            x += speed / 2
         else:
-            x += speed/1.5
+            x += speed / 1.5
         chickturnr = True
         running = True
     else:
@@ -253,7 +231,7 @@ while True:
     if legrect.colliderect(islerect.x, islerect.y, islerect.w, 10):
         ground = islerect.top
     else:
-        ground = H-50
+        ground = H - 50
 
     sc.fill(BLACK)
     sc.blit(island, islerect)
