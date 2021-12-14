@@ -1,5 +1,5 @@
 # from classes.map import World
-
+import imports
 import pygame
 pygame.init()
 
