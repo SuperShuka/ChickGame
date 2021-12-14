@@ -262,13 +262,16 @@ while True:
 
     if spikerect.collidepoint(hrect.center):
         chickimage = dead
-        for i in range(15):
-            y += 1
+        for i in range(10):
+            y -= 5
             hrect = hero.get_rect(bottomleft=(x, y))
             chickimage = dead
+            sc.fill(LIGHT_BLUE)
+            sc.blit(island, islerect)
             sc.blit(chickimage, hrect)
-            print(y)
-            clock.tick(5)
+            sc.blit(spikeimage, spikerect)
+            pygame.display.update()
+            clock.tick(10)
         exit()
 
     sc.fill(LIGHT_BLUE)
