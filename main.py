@@ -39,15 +39,15 @@ y = H-50
 chickimage = chickright
 jumpmove = 0
 springmove = 0
-speed = 5
+speed = 10
 gravity = 6
 ground = H-50
 jump_height = 200
 chickturnr = 0
 runanim = 1
 flyanim = 1
-jumpspeed = 10
-tile_size = 50
+jumpspeed = 20
+tile_size = 25
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
@@ -69,17 +69,61 @@ world_data = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 2, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 2, 2, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1],
+    [1, 6, 6, 6, 6, 6, 6, 6, 6, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1],
+    [1, 0, 0, 0, 0, 0, 2, 2, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
 def draw_grid():
     for line in range(0, 200):
         pygame.draw.line(sc, (WHITE), (0, line * tile_size), (W, line * tile_size))
         pygame.draw.line(sc, (WHITE), (line * tile_size, 0), (line * tile_size, H))
+
+# отрисовака сетки
+class World():
+    def __init__(self, data):
+        # необходимо для сетки
+        self.tile_list = []
+        # картинки
+        dirt_img = pygame.image.load('Assets/Images/earthblock.png')
+        cloud_img = pygame.image.load('Assets/Images/cloud.png')
+        coin_img = pygame.image.load('Assets/Images/coin.png')
+        bush_img = pygame.image.load('Assets/Images/bush.png')
+        island_img = pygame.image.load('Assets/Images/floatingisland.png')
+        spike_img = pygame.image.load('Assets/Images/spike.png')
+        egg_img = pygame.image.load('Assets/Images/egg.png')
+
+        row_count = 0
+        # считаем кол-во рядов
+        for row in data:
+            col_count = 0
+            # считаем плитки
+            for tile in row:
+                # плитка земли
+                if tile == 1:
+                    img = pygame.transform.scale(dirt_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = col_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                # плитка острова
+                if tile == 2:
+                    img = pygame.transform.scale(island_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = col_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                col_count+=1
+            row_count+=1
+    def draw(self):
+        for tile in self.tile_list:
+            sc.blit(tile[0], tile[1])
+
+world = World(world_data)
 
 while True:
     for event in pygame.event.get():
@@ -235,13 +279,13 @@ while True:
     else:
         ground = H - 50
     print(legrect.y, islerect.top)
-    # sc.blit(back, (0, 0))
-    sc.fill(BLACK)
+    sc.blit(back, (0, 0))
+    # sc.fill(BLACK)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
+    world.draw()
     draw_grid()
-    # world = World(world_data)
-    # world.draw()
+
     pygame.display.update()
 
     clock.tick(FPS)
