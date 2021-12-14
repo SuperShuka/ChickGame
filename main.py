@@ -1,4 +1,4 @@
-from world import World
+from map import World
 
 import pygame
 pygame.init()
