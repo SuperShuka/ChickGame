@@ -24,6 +24,7 @@ flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
 flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
 flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
 islepict = pygame.image.load('Assets/Images/bigfloatingisland.png')
+back = pygame.image.load('Assets/Images/sky.png')
 
 
 WHITE = (255, 255, 255)
@@ -255,6 +256,7 @@ while True:
     else:
         ground = H - 50
     print(legrect.y, islerect.top)
+    # sc.blit(back, (0, 0))
     sc.fill(BLACK)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
