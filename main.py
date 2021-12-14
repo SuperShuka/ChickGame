@@ -23,13 +23,16 @@ flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
 flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
 flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
 flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
-islepict = pygame.image.load('Assets/Images/bigfloatingisland.png')
+islepict = pygame.image.load('Assets/Images/testisland.png')
+spikeimage = pygame.image.load('Assets/Images/spike.png')
+dead = pygame.image.load('Assets/Images/Chickdeatheffect.png')
 
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+LIGHT_BLUE = (174, 174, 255)
 BLACK = (0, 0, 0)
 FPS = 60
 clock = pygame.time.Clock()
@@ -51,7 +54,8 @@ tile_size = 50
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
-island = pygame.Surface((40, 22))
+spike = pygame.Surface((52, 46))
+island = pygame.Surface((185, 50))
 island.blit(islepict, (0, 0))
 world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -111,6 +115,7 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 300, H - 150))
+    spikerect = spike.get_rect(bottomleft=(islerect.x+50, islerect.top))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
     "Обрабатываем прыжок и полёт"
@@ -254,10 +259,22 @@ while True:
         ground = islerect.top
     else:
         ground = H - 50
-    print(legrect.y, islerect.top)
-    sc.fill(BLACK)
+
+    if spikerect.collidepoint(hrect.center):
+        chickimage = dead
+        for i in range(15):
+            y += 1
+            hrect = hero.get_rect(bottomleft=(x, y))
+            chickimage = dead
+            sc.blit(chickimage, hrect)
+            print(y)
+            clock.tick(5)
+        exit()
+
+    sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
+    sc.blit(spikeimage, spikerect)
     world = World(world_data)
     world.draw()
     pygame.display.update()
