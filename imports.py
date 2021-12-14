@@ -1,2 +1,5 @@
-from main import sc
-from classes.map import World, world_data
+from main import sc, W, H
+
+sc = sc
+W = W
+H = H
