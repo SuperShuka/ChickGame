@@ -250,7 +250,7 @@ while True:
             else:
                 chickimage = chickjumpleft
 
-    if legrect.colliderect(islerect) and legrect.y >= islerect.top.y:
+    if legrect.colliderect(islerect) and legrect.y >= islerect.top:
         ground = islerect.top
     else:
         ground = H - 50
