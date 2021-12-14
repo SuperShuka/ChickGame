@@ -1,5 +1,5 @@
 import pygame
-import imports
+from imports import sc
 
 pygame.init()
 
