@@ -1,4 +1,3 @@
-# from classes.map import World
 import imports
 import pygame
 pygame.init()
@@ -24,7 +23,7 @@ flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
 flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
 flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
 flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
-islepict = pygame.image.load('Assets/Images/floatingisland.png')
+islepict = pygame.image.load('Assets/Images/bigfloatingisland.png')
 
 
 WHITE = (255, 255, 255)
@@ -51,8 +50,8 @@ jumpspeed = 10
 tile_size = 50
 
 hero = pygame.Surface((42, 46))
-chicklegs = pygame.Surface((10, 1))
-island = pygame.Surface((100, 70))
+chicklegs = pygame.Surface((10, 15))
+island = pygame.Surface((40, 22))
 island.blit(islepict, (0, 0))
 world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -76,6 +75,7 @@ world_data = [
     [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
+
 
 class World:
     def __init__(self, data):
@@ -112,7 +112,7 @@ while True:
 
     islerect = island.get_rect(bottomleft=(W // 2 + 300, H - 150))
     hrect = hero.get_rect(bottomleft=(x, y))
-    legrect = chicklegs.get_rect(bottomleft=(x + 15, y))
+    legrect = chicklegs.get_rect(topleft=(x + 15, y))
     "Обрабатываем прыжок и полёт"
     if keys[pygame.K_SPACE] and ground == hrect.bottom:
         jumpmove = jump_height
@@ -250,11 +250,11 @@ while True:
             else:
                 chickimage = chickjumpleft
 
-    if legrect.colliderect(islerect) and legrect.y >= islerect.top.y:
+    if islerect.colliderect(legrect) and legrect.y <= islerect.top:
         ground = islerect.top
     else:
         ground = H - 50
-
+    print(legrect.y, islerect.top)
     sc.fill(BLACK)
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
