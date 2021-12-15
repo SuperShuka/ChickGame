@@ -50,7 +50,9 @@ chickturnr = 0
 runanim = 1
 flyanim = 1
 jumpspeed = 10
+
 tile_size = 50
+
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
@@ -270,9 +272,16 @@ while True:
             sc.blit(island, islerect)
             sc.blit(chickimage, hrect)
             sc.blit(spikeimage, spikerect)
+            world = World(world_data)
+            world.draw()
             pygame.display.update()
-            clock.tick(10)
-        exit()
+            clock.tick(15)
+        chickturnr = 0
+        x = W // 2
+        y = H - 50
+        chickimage = chickright
+        jumpmove = 0
+        springmove = 0
 
     sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
