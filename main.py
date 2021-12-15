@@ -9,6 +9,7 @@ sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
+pygame.mixer.music.load('Assets/Sounds/LoopLepr.mp3')
 chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
 chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
@@ -264,8 +265,9 @@ while True:
 
     if spikerect.collidepoint(hrect.center):
         chickimage = dead
-        for i in range(10):
-            y -= 5
+        pygame.mixer.music.play()
+        for i in range(60):
+            y -= 1
             hrect = hero.get_rect(bottomleft=(x, y))
             chickimage = dead
             sc.fill(LIGHT_BLUE)
@@ -275,13 +277,14 @@ while True:
             world = World(world_data)
             world.draw()
             pygame.display.update()
-            clock.tick(15)
+            clock.tick(120)
         chickturnr = 0
         x = W // 2
         y = H - 50
         chickimage = chickright
         jumpmove = 0
         springmove = 0
+        hrect = hero.get_rect(bottomleft=(x, y))
 
     sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
