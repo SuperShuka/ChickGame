@@ -313,6 +313,7 @@ while True:
         chickturnr = 0
         x = W // 2
         y = H - 50
+        xspeed = yspeed = 0
         chickimage = chickright
         jumpmove = 0
         springmove = 0
