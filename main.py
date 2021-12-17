@@ -44,7 +44,7 @@ chickimage = chickright
 xspeed = 0
 runspeed = 5
 yspeed = 0
-gravity = 0.5
+gravity = 0.7
 jumpspeed = 15
 acceleration = 0.5
 ground = H-50
@@ -116,7 +116,7 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 300, H - 150))
-    spikerect = spike.get_rect(bottomleft=(islerect.x, islerect.top))
+    spikerect = spike.get_rect(bottomleft=(islerect.x+150, islerect.top))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
 
@@ -133,7 +133,7 @@ while True:
     if y < ground and yspeed <= 0:
         if keys[pygame.K_SPACE]:
             if yspeed > -2:
-                yspeed -= gravity/4
+                yspeed -= gravity/2
             else:
                 yspeed = -2
         else:
