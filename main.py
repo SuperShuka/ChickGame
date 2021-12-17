@@ -1,4 +1,3 @@
-import imports
 import pygame
 pygame.init()
 
@@ -9,7 +8,8 @@ sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
-pygame.mixer.music.load('Assets/Sounds/LoopLepr.mp3')
+pygame.mixer.music.load('Assets/Sounds/Deathsound.mp3')
+skyimg = pygame.image.load('Assets/Images/sky.png')
 chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
 chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
@@ -33,7 +33,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-LIGHT_BLUE = (174, 174, 255)
+LIGHT_BLUE = (150, 220, 255)
 BLACK = (0, 0, 0)
 FPS = 60
 clock = pygame.time.Clock()
@@ -41,19 +41,17 @@ clock = pygame.time.Clock()
 x = W//2
 y = H-50
 chickimage = chickright
-jumpmove = 0
-springmove = 0
-speed = 5
-gravity = 6
+xspeed = 0
+runspeed = 5
+yspeed = 0
+gravity = 0.5
+jumpspeed = 15
+acceleration = 0.5
 ground = H-50
-jump_height = 200
 chickturnr = 0
 runanim = 1
 flyanim = 1
-jumpspeed = 10
-
 tile_size = 50
-
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
@@ -118,72 +116,83 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 300, H - 150))
-    spikerect = spike.get_rect(bottomleft=(islerect.x+50, islerect.top))
+    spikerect = spike.get_rect(bottomleft=(islerect.x, islerect.top))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
-    "Обрабатываем прыжок и полёт"
-    if keys[pygame.K_SPACE] and ground == hrect.bottom:
-        jumpmove = jump_height
-    "Падение"
-    if y < ground and jumpmove == 0 and springmove == 0:
-        if keys[pygame.K_SPACE]:
-            y += gravity // 3
-        else:
-            if ground - jump_height <= 5:
-                y += gravity // 6
-            elif ground - jump_height <= 10:
-                y += gravity // 3
-            else:
-                if y + gravity > ground:
-                    y = ground
-                else:
-                    y += gravity
-    "Фиксить проваливание под землю БОЛЬШЕ НЕ НУЖНО УРАААААА!!!!!!"
-    "Двигаем по Y"
-    if jumpmove > 0:
-        if jumpmove < 5:
-            y -= jumpspeed // 10
-            jumpmove -= jumpspeed // 10
-        elif jumpmove < 10:
-            y -= jumpspeed // 5
-            jumpmove -= jumpspeed // 5
-        elif jumpmove < 25:
-            y -= jumpspeed // 2
-            jumpmove -= jumpspeed // 2
-        elif jumpmove < 35:
-            y -= jumpspeed * 0.8 // 1
-            jumpmove -= jumpspeed * 0.8 // 1
-        else:
-            y -= jumpspeed
-            jumpmove -= jumpspeed
 
-    if springmove > 0:
-        jumpmove = 0
+    "Обрабатываем прыжок"
+    if keys[pygame.K_SPACE] and ground == hrect.bottom:
+        yspeed = jumpspeed
+
+    "Поднимаем по Y"
+    if yspeed > 0:
+        y -= yspeed
+        yspeed -= gravity
+
+    "Падение и полёт"
+    if y < ground and yspeed <= 0:
+        if keys[pygame.K_SPACE]:
+            if yspeed > -2:
+                yspeed -= gravity/4
+            else:
+                yspeed = -2
+        else:
+            if yspeed > -6:
+                yspeed -= gravity
+            else:
+                yspeed = -6
+        if y-yspeed >= ground:
+            y = ground
+            yspeed = 0
+        y -= yspeed
 
     "Движение по X"
     if keys[pygame.K_a] and keys[pygame.K_d]:
-        x = x
-        running = False
+        if xspeed > 0:
+            if xspeed - acceleration * 2 <= 0:
+                xspeed = 0
+            else:
+                xspeed -= acceleration * 2
+        else:
+            if xspeed + acceleration * 2 >= 0:
+                xspeed = 0
+            else:
+                xspeed += acceleration * 2
     elif keys[pygame.K_a]:
         if hrect.bottom == ground:
-            x -= speed
+            if xspeed > -runspeed:
+                xspeed -= acceleration
         elif keys[pygame.K_SPACE]:
-            x -= speed / 2
+            if xspeed > -runspeed:
+                xspeed -= acceleration/2
         else:
-            x -= speed / 1.5
+            if xspeed > -runspeed:
+                xspeed -= acceleration/1.5
         chickturnr = False
-        running = True
     elif keys[pygame.K_d]:
         if hrect.bottom == ground:
-            x += speed
+            if xspeed < runspeed:
+                xspeed += acceleration
         elif keys[pygame.K_SPACE]:
-            x += speed / 2
+            if xspeed < runspeed:
+                xspeed += acceleration/2
         else:
-            x += speed / 1.5
+            if xspeed < runspeed:
+                xspeed += acceleration/1.5
         chickturnr = True
-        running = True
     else:
-        running = False
+        if xspeed > 0:
+            if xspeed-acceleration*2 <= 0:
+                xspeed = 0
+            else:
+                xspeed -= acceleration
+        else:
+            if xspeed+acceleration*2 >= 0:
+                xspeed = 0
+            else:
+                xspeed += acceleration
+    x += xspeed
+    print(xspeed)
 
     # проваливание вправо и влево
     # if x <= 0:
@@ -194,7 +203,7 @@ while True:
     "Анимация"
     # При беге
     if hrect.bottom == ground and not keys[pygame.K_SPACE]:
-        if running:
+        if xspeed:
             if runanim <= 5:
                 if chickturnr:
                     chickimage = chickrunright1
@@ -216,7 +225,7 @@ while True:
                 chickimage = chickleft
     # При полёте
     if not hrect.bottom == ground:
-        if not jumpmove == 0 or not springmove == 0:
+        if yspeed >= 0:
             if chickturnr:
                 chickimage = chickjumpright
             else:
