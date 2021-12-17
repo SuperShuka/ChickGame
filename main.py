@@ -147,52 +147,75 @@ while True:
         y -= yspeed
 
     "Движение по X"
+# ОБЕ НАЖАТЫ (Остановка)
     if keys[pygame.K_a] and keys[pygame.K_d]:
         if xspeed > 0:
-            if xspeed - acceleration * 2 <= 0:
+            if xspeed - acceleration <= 0:
                 xspeed = 0
             else:
-                xspeed -= acceleration * 2
+                if hrect.bottom == ground:
+                    xspeed -= acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed -= acceleration / 1.5
+                else:
+                    xspeed -= acceleration / 1.25
         else:
-            if xspeed + acceleration * 2 >= 0:
+            if xspeed + acceleration >= 0:
                 xspeed = 0
             else:
-                xspeed += acceleration * 2
-    elif keys[pygame.K_a]:
+                if hrect.bottom == ground:
+                    xspeed += acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed += acceleration / 1.5
+                else:
+                    xspeed += acceleration / 1.25
+# НАЛЕВО
+    elif keys[pygame.K_a] and xspeed <= 0:
         if hrect.bottom == ground:
             if xspeed > -runspeed:
                 xspeed -= acceleration
         elif keys[pygame.K_SPACE]:
-            if xspeed > -runspeed:
+            if xspeed > -runspeed/2:
                 xspeed -= acceleration/2
         else:
-            if xspeed > -runspeed:
+            if xspeed > -runspeed/1.5:
                 xspeed -= acceleration/1.5
         chickturnr = False
-    elif keys[pygame.K_d]:
+# НАПРАВО
+    elif keys[pygame.K_d] and xspeed >= 0:
         if hrect.bottom == ground:
             if xspeed < runspeed:
                 xspeed += acceleration
         elif keys[pygame.K_SPACE]:
-            if xspeed < runspeed:
+            if xspeed < runspeed/2:
                 xspeed += acceleration/2
         else:
-            if xspeed < runspeed:
+            if xspeed < runspeed/1.5:
                 xspeed += acceleration/1.5
         chickturnr = True
+# НЕ НАЖАТЫ (Остановка)
     else:
         if xspeed > 0:
-            if xspeed-acceleration*2 <= 0:
+            if xspeed-acceleration <= 0:
                 xspeed = 0
             else:
-                xspeed -= acceleration
+                if hrect.bottom == ground:
+                    xspeed -= acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed -= acceleration/1.5
+                else:
+                    xspeed -= acceleration/1.25
         else:
-            if xspeed+acceleration*2 >= 0:
+            if xspeed+acceleration >= 0:
                 xspeed = 0
             else:
-                xspeed += acceleration
+                if hrect.bottom == ground:
+                    xspeed += acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed += acceleration/1.5
+                else:
+                    xspeed += acceleration/1.25
     x += xspeed
-    print(xspeed)
 
     # проваливание вправо и влево
     # if x <= 0:
