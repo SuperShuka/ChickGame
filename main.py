@@ -57,8 +57,8 @@ on_ice = 0
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
 spike = pygame.Surface((52, 46))
-island = pygame.Surface((185, 50))
-island.blit(islepict, (0, 0))
+island = pygame.Surface((250, 30))
+island.fill(GREEN)
 world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -117,7 +117,7 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 200, H - 100))
-    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top))
+    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top+200))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
 
@@ -147,147 +147,97 @@ while True:
             yspeed = 0
         y -= yspeed
 
-        "Движение по X " "БЕЗ ЛЬДА"
+        "Движение по X "
 # ОБЕ НАЖАТЫ (Остановка)
-    if not on_ice:
-        if keys[pygame.K_a] and keys[pygame.K_d]:
-            if xspeed > 0:
-                if xspeed - acceleration <= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed -= acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed -= acceleration / 1.5
-                    else:
-                        xspeed -= acceleration / 1.25
+    if keys[pygame.K_a] and keys[pygame.K_d]:
+        if xspeed > 0:
+            if xspeed - acceleration <= 0:
+                xspeed = 0
             else:
-                if xspeed + acceleration >= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed += acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed += acceleration / 1.5
+                if hrect.bottom == ground:
+                    if on_ice:
+                        xspeed -= acceleration / 3
                     else:
-                        xspeed += acceleration / 1.25
+                        xspeed -= acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed -= acceleration / 1.5
+                else:
+                    xspeed -= acceleration / 1.25
+        else:
+            if xspeed + acceleration >= 0:
+                xspeed = 0
+            else:
+                if hrect.bottom == ground:
+                    if on_ice:
+                        xspeed += acceleration / 3
+                    else:
+                        xspeed += acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed += acceleration / 3
+                else:
+                    xspeed += acceleration / 2
 # НАЛЕВО
-        elif keys[pygame.K_a] and xspeed <= 0:
-            if hrect.bottom == ground:
+    elif keys[pygame.K_a] and xspeed <= 0:
+        if hrect.bottom == ground:
+            if on_ice:
+                if xspeed > -runspeed * 1.5:
+                    xspeed -= acceleration / 3
+            else:
                 if xspeed > -runspeed:
                     xspeed -= acceleration
-            elif keys[pygame.K_SPACE]:
-                if xspeed > -runspeed/2:
-                    xspeed -= acceleration/2
-            else:
-                if xspeed > -runspeed/1.5:
-                    xspeed -= acceleration/1.5
-            chickturnr = False
+        elif keys[pygame.K_SPACE]:
+            if xspeed > -runspeed / 2:
+                xspeed -= acceleration / 3
+        else:
+            if xspeed > -runspeed / 1.5:
+                xspeed -= acceleration / 2
+        chickturnr = False
 # НАПРАВО
-        elif keys[pygame.K_d] and xspeed >= 0:
-            if hrect.bottom == ground:
+    elif keys[pygame.K_d] and xspeed >= 0:
+        if hrect.bottom == ground:
+            if on_ice:
+                if xspeed < runspeed * 1.5:
+                    xspeed += acceleration / 3
+            else:
                 if xspeed < runspeed:
                     xspeed += acceleration
-            elif keys[pygame.K_SPACE]:
-                if xspeed < runspeed/2:
-                    xspeed += acceleration/2
-            else:
-                if xspeed < runspeed/1.5:
-                    xspeed += acceleration/1.5
-            chickturnr = True
-# НЕ НАЖАТЫ (Остановка)
+        elif keys[pygame.K_SPACE]:
+            if xspeed < runspeed / 2:
+                xspeed += acceleration / 3
         else:
-            if xspeed > 0:
-                if xspeed-acceleration <= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed -= acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed -= acceleration/1.5
-                    else:
-                        xspeed -= acceleration/1.25
-            else:
-                if xspeed+acceleration >= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed += acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed += acceleration/1.5
-                    else:
-                        xspeed += acceleration/1.25
-        "Движение по X " "ПО ЛЬДУ"
-# ОБЕ НАЖАТЫ (Остановка)
+            if xspeed < runspeed / 1.5:
+                xspeed += acceleration / 2
+        chickturnr = True
+        # НЕ НАЖАТЫ (Остановка)
     else:
-        if keys[pygame.K_a] and keys[pygame.K_d]:
-            if xspeed > 0:
-                if xspeed - acceleration <= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed -= acceleration/1.25
-                    elif keys[pygame.K_SPACE]:
-                        xspeed -= acceleration/1.75
+        if xspeed > 0:
+            if xspeed - acceleration <= 0:
+                xspeed = 0
+            else:
+                if hrect.bottom == ground:
+                    if on_ice:
+                        xspeed -= acceleration / 3
                     else:
-                        xspeed -= acceleration/1.5
-            else:
-                if xspeed + acceleration >= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
-                        xspeed += acceleration/1.25
-                    elif keys[pygame.K_SPACE]:
-                        xspeed += acceleration/1.75
-                    else:
-                        xspeed += acceleration/1.5
-# НАЛЕВО
-        elif keys[pygame.K_a] and xspeed <= 0:
-            if hrect.bottom == ground:
-                if xspeed > -runspeed:
-                    xspeed -= acceleration
-            elif keys[pygame.K_SPACE]:
-                if xspeed > -runspeed/2:
-                    xspeed -= acceleration/2
-            else:
-                if xspeed > -runspeed/1.5:
-                    xspeed -= acceleration/1.5
-            chickturnr = False
-# НАПРАВО
-        elif keys[pygame.K_d] and xspeed >= 0:
-            if hrect.bottom == ground:
-                if xspeed < runspeed:
-                    xspeed += acceleration
-            elif keys[pygame.K_SPACE]:
-                if xspeed < runspeed/2:
-                    xspeed += acceleration/2
-            else:
-                if xspeed < runspeed/1.5:
-                    xspeed += acceleration/1.5
-            chickturnr = True
-# НЕ НАЖАТЫ (Остановка)
-        else:
-            if xspeed > 0:
-                if xspeed-acceleration <= 0:
-                    xspeed = 0
-                else:
-                    if hrect.bottom == ground:
                         xspeed -= acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed -= acceleration/1.5
-                    else:
-                        xspeed -= acceleration/1.25
-            else:
-                if xspeed+acceleration >= 0:
-                    xspeed = 0
+                elif keys[pygame.K_SPACE]:
+                    xspeed -= acceleration / 3
                 else:
-                    if hrect.bottom == ground:
-                        xspeed += acceleration
-                    elif keys[pygame.K_SPACE]:
-                        xspeed += acceleration/1.5
+                    xspeed -= acceleration / 2
+        else:
+            if xspeed + acceleration >= 0:
+                xspeed = 0
+            else:
+                if hrect.bottom == ground:
+                    if on_ice:
+                        xspeed += acceleration / 3
                     else:
-                        xspeed += acceleration/1.25
+                        xspeed += acceleration
+                elif keys[pygame.K_SPACE]:
+                    xspeed += acceleration / 3
+                else:
+                    xspeed += acceleration / 2
     x += xspeed
+    print(xspeed)
 
     # проваливание вправо и влево
     # if x <= 0:
@@ -364,7 +314,9 @@ while True:
 
     if islerect.colliderect(legrect) and legrect.y <= islerect.top:
         ground = islerect.top
+        on_ice = 0
     else:
+        on_ice = 1
         ground = H - 50
 
     if spikerect.collidepoint(hrect.center):
