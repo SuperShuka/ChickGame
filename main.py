@@ -117,7 +117,7 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 200, H - 100))
-    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top+200))
+    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top-250))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
 
