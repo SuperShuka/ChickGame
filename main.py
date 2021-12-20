@@ -107,6 +107,17 @@ class World:
             pygame.draw.rect(sc, (255, 255, 255), tile[1], 2)
 
 
+class Spike:
+    def __init__(self):
+        self.x = 150
+        self.y = 200
+        self.surf = pygame.Surface((33, 33))
+        self.image = pygame.image.load('Assets/Images/spike.png')
+
+    def usespike(self):
+        self.x = 1
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -117,7 +128,7 @@ while True:
     keys = pygame.key.get_pressed()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 200, H - 100))
-    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top-250))
+    spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top))
     hrect = hero.get_rect(bottomleft=(x, y))
     legrect = chicklegs.get_rect(topleft=(x + 15, y))
 
@@ -314,9 +325,9 @@ while True:
 
     if islerect.colliderect(legrect) and legrect.y <= islerect.top:
         ground = islerect.top
-        on_ice = 0
-    else:
         on_ice = 1
+    else:
+        on_ice = 0
         ground = H - 50
 
     if spikerect.collidepoint(hrect.center):
