@@ -9,6 +9,7 @@ pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
 pygame.mixer.music.load('Assets/Sounds/Deathsound.mp3')
+pygame.mixer.music.load('Assets/Sounds/Chicken Play A Wind.mp3')
 skyimg = pygame.image.load('Assets/Images/sky.png')
 chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
@@ -28,6 +29,7 @@ islepict = pygame.image.load('Assets/Images/testisland.png')
 spikeimage = pygame.image.load('Assets/Images/spike.png')
 dead = pygame.image.load('Assets/Images/Chickdeatheffect.png')
 
+pygame.mixer.music.play(-1)
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -56,7 +58,7 @@ on_ice = 0
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
-spike = pygame.Surface((52, 46))
+spike = pygame.Surface((33, 33))
 island = pygame.Surface((250, 30))
 island.fill(GREEN)
 world_data = [
@@ -330,9 +332,9 @@ while True:
         on_ice = 0
         ground = H - 50
 
-    if spikerect.collidepoint(hrect.center):
+    if hrect.colliderect(spikerect):
         chickimage = dead
-        pygame.mixer.music.play()
+        pygame.mixer.music.pause()
         for i in range(60):
             y -= 1
             hrect = hero.get_rect(bottomleft=(x, y))
@@ -353,6 +355,8 @@ while True:
         jumpmove = 0
         springmove = 0
         hrect = hero.get_rect(bottomleft=(x, y))
+        pygame.mixer.music.rewind()
+        pygame.mixer.music.play(-1)
 
     sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
