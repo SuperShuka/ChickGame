@@ -1,15 +1,16 @@
 import pygame
+from Wait import wait
 pygame.init()
 
-W = 1000
-H = 750
+W = 1920
+H = 1080
 
-sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
+sc = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
-pygame.mixer.music.load('Assets/Sounds/Deathsound.mp3')
-pygame.mixer.music.load('Assets/Sounds/Chicken Play A Wind.mp3')
+chicksound = pygame.mixer.Sound('Assets/Sounds/Papapapapapa.mp3')
+pygame.mixer.music.load('Assets/Sounds/Grass.mp3')
 skyimg = pygame.image.load('Assets/Images/sky.png')
 chickleft = pygame.image.load('Assets/Images/chickleft.png')
 chickright = pygame.image.load('Assets/Images/chickright.png')
@@ -31,6 +32,16 @@ dead = pygame.image.load('Assets/Images/Chickdeatheffect.png')
 
 pygame.mixer.music.play(-1)
 
+
+def stop():
+    savecords = open("Assets/Saves.txt", "w")
+    savecords.write(str(int(x // 1)))
+    savecords.write(', ')
+    savecords.write(str(int(y // 1)))
+    savecords.close()
+    exit()
+
+
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
@@ -40,8 +51,13 @@ BLACK = (0, 0, 0)
 FPS = 60
 clock = pygame.time.Clock()
 
-x = W//2
-y = H-50
+loadcords = open("Assets/Saves.txt", "r")
+prevcords = loadcords.readline()
+print(prevcords)
+x, y = prevcords.split(',')
+x, y = int(x), int(y)
+loadcords.close()
+
 chickimage = chickright
 xspeed = 0
 runspeed = 5
@@ -123,9 +139,10 @@ class Spike:
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            exit()
-        if event.type == pygame.K_ESCAPE:
-            exit()
+            stop()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                stop()
 
     keys = pygame.key.get_pressed()
 
@@ -250,7 +267,6 @@ while True:
                 else:
                     xspeed += acceleration / 2
     x += xspeed
-    print(xspeed)
 
     # проваливание вправо и влево
     # if x <= 0:
@@ -347,16 +363,7 @@ while True:
             world.draw()
             pygame.display.update()
             clock.tick(120)
-        chickturnr = 0
-        x = W // 2
-        y = H - 50
-        xspeed = yspeed = 0
-        chickimage = chickright
-        jumpmove = 0
-        springmove = 0
-        hrect = hero.get_rect(bottomleft=(x, y))
-        pygame.mixer.music.rewind()
-        pygame.mixer.music.play(-1)
+        exit()
 
     sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
