@@ -1,9 +1,11 @@
 import pygame
+import ctypes
 from Wait import wait
 pygame.init()
 
-W = 1920
-H = 1080
+user32 = ctypes.windll.user32
+W, H = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+print(W, H)
 
 sc = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
 pygame.display.set_caption('Chick Game')
@@ -53,7 +55,6 @@ clock = pygame.time.Clock()
 
 loadcords = open("Assets/Saves.txt", "r")
 prevcords = loadcords.readline()
-print(prevcords)
 x, y = prevcords.split(',')
 x, y = int(x), int(y)
 loadcords.close()
