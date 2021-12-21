@@ -1,4 +1,2 @@
 from main import sc
-from classes.map import World
-
-sc = sc
+from map import World
