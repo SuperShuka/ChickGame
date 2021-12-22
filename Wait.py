@@ -6,4 +6,4 @@ def wait(time):
     i = 0
     while i <= time:
         i += 1
-        clock.tick(1)
+        clock.tick(10)
