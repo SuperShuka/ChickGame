@@ -1,48 +1,32 @@
 import pygame
-import ctypes
-from Wait import wait
 pygame.init()
 
-user32 = ctypes.windll.user32
-W, H = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-print(W, H)
+W = 1000
+H = 750
 
-sc = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
+sc = pygame.display.set_mode((W, H), pygame.RESIZABLE)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
-chicksound = pygame.mixer.Sound('Assets/Sounds/Papapapapapa.mp3')
-pygame.mixer.music.load('Assets/Sounds/Grass.mp3')
-pygame.mixer.music.set_volume(0.3)
-skyimg = pygame.image.load('Assets/Images/sky.png').convert_alpha()
-chickleft = pygame.image.load('Assets/Images/chickleft.png').convert_alpha()
-chickright = pygame.image.load('Assets/Images/chickright.png').convert_alpha()
-chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png').convert_alpha()
-chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png').convert_alpha()
-chickrunleft1 = pygame.image.load('Assets/Images/chickrunleft1.png').convert_alpha()
-chickrunleft2 = pygame.image.load('Assets/Images/chickrunleft2.png').convert_alpha()
-chickrunright1 = pygame.image.load('Assets/Images/chickrunright1.png').convert_alpha()
-chickrunright2 = pygame.image.load('Assets/Images/chickrunright2.png').convert_alpha()
-flyleft1 = pygame.image.load('Assets/Images/chickflyleftst1.png').convert_alpha()
-flyleft2 = pygame.image.load('Assets/Images/chickflyleftst2.png').convert_alpha()
-flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png').convert_alpha()
-flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png').convert_alpha()
-flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png').convert_alpha()
-flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png').convert_alpha()
-islepict = pygame.image.load('Assets/Images/testisland.png').convert_alpha()
-spikeimage = pygame.image.load('Assets/Images/spike.png').convert_alpha()
-dead = pygame.image.load('Assets/Images/Chickdeatheffect.png').convert_alpha()
-
-pygame.mixer.music.play(-1)
-
-
-def stop():
-    savecords = open("Assets/Saves.txt", "w")
-    savecords.write(str(int(x // 1)))
-    savecords.write(', ')
-    savecords.write(str(int(y // 1)))
-    savecords.close()
-    exit()
+pygame.mixer.music.load('Assets/Sounds/Deathsound.mp3')
+skyimg = pygame.image.load('Assets/Images/sky.png')
+chickleft = pygame.image.load('Assets/Images/chickleft.png')
+chickright = pygame.image.load('Assets/Images/chickright.png')
+chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png')
+chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png')
+chickrunleft1 = pygame.image.load('Assets/Images/chickrunleft1.png')
+chickrunleft2 = pygame.image.load('Assets/Images/chickrunleft2.png')
+chickrunright1 = pygame.image.load('Assets/Images/chickrunright1.png')
+chickrunright2 = pygame.image.load('Assets/Images/chickrunright2.png')
+flyleft1 = pygame.image.load('Assets/Images/chickflyleftst1.png')
+flyleft2 = pygame.image.load('Assets/Images/chickflyleftst2.png')
+flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png')
+flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png')
+flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png')
+flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png')
+islepict = pygame.image.load('Assets/Images/testisland.png')
+spikeimage = pygame.image.load('Assets/Images/spike.png')
+dead = pygame.image.load('Assets/Images/Chickdeatheffect.png')
 
 
 WHITE = (255, 255, 255)
@@ -54,12 +38,8 @@ BLACK = (0, 0, 0)
 FPS = 60
 clock = pygame.time.Clock()
 
-loadcords = open("Assets/Saves.txt", "r")
-prevcords = loadcords.readline()
-x, y = prevcords.split(',')
-x, y = int(x), int(y)
-loadcords.close()
-
+x = W//2
+y = H-50
 chickimage = chickright
 xspeed = 0
 runspeed = 5
@@ -76,7 +56,7 @@ on_ice = 0
 
 hero = pygame.Surface((42, 46))
 chicklegs = pygame.Surface((10, 15))
-spike = pygame.Surface((33, 33))
+spike = pygame.Surface((52, 46))
 island = pygame.Surface((250, 30))
 island.fill(GREEN)
 world_data = [
@@ -102,6 +82,10 @@ world_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
+def draw_grid():
+    for line in range(0, 200):
+        pygame.draw.line(sc, WHITE, (0, line * tile_size), (W, line * tile_size))
+        pygame.draw.line(sc, WHITE, (line * tile_size, 0), (line * tile_size, H))
 
 class World:
     def __init__(self, data):
@@ -141,10 +125,9 @@ class Spike:
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            stop()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                stop()
+            exit()
+        if event.type == pygame.K_ESCAPE:
+            exit()
 
     keys = pygame.key.get_pressed()
 
@@ -269,6 +252,7 @@ while True:
                 else:
                     xspeed += acceleration / 2
     x += xspeed
+    print(xspeed)
 
     # проваливание вправо и влево
     # if x <= 0:
@@ -350,10 +334,9 @@ while True:
         on_ice = 0
         ground = H - 50
 
-    if hrect.colliderect(spikerect):
+    if spikerect.collidepoint(hrect.center):
         chickimage = dead
-        pygame.mixer.music.pause()
-        chicksound.play()
+        pygame.mixer.music.play()
         for i in range(60):
             y -= 1
             hrect = hero.get_rect(bottomleft=(x, y))
@@ -366,8 +349,14 @@ while True:
             world.draw()
             pygame.display.update()
             clock.tick(120)
-        wait(20)
-        exit()
+        chickturnr = 0
+        x = W // 2
+        y = H - 50
+        xspeed = yspeed = 0
+        chickimage = chickright
+        jumpmove = 0
+        springmove = 0
+        hrect = hero.get_rect(bottomleft=(x, y))
 
     sc.fill(LIGHT_BLUE)
     sc.blit(island, islerect)
@@ -375,6 +364,7 @@ while True:
     sc.blit(spikeimage, spikerect)
     world = World(world_data)
     world.draw()
+    draw_grid()
     pygame.display.update()
 
     clock.tick(FPS)

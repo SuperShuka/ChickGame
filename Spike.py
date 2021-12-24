@@ -7,5 +7,5 @@ class Spike(pygame.sprite.Sprite):
 
         self.image = pygame.image.load('Assets/Images/spike.png')
 
-    def usespike(self):
-        self.rect =
+    # def usespike(self):
+    #     self.rect = rect
