@@ -87,29 +87,37 @@ def draw_grid():
         pygame.draw.line(sc, WHITE, (0, line * tile_size), (W, line * tile_size))
         pygame.draw.line(sc, WHITE, (line * tile_size, 0), (line * tile_size, H))
 
-class World:
+class World():
     def __init__(self, data):
         self.tile_list = []
 
-        dirt = pygame.image.load('Assets/Images/earthblock.png')
+        dirt_img = pygame.image.load('Assets/Images/earthblock.png')
+        grass_img = pygame.image.load('Assets/Images/earthblockwithoutgrass.png')
 
         row_count = 0
         for row in data:
             col_count = 0
             for tile in row:
                 if tile == 1:
-                    img = pygame.transform.scale(dirt, (tile_size, tile_size))
+                    img = pygame.transform.scale(dirt_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = col_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                if tile == 2:
+                    img = pygame.transform.scale(grass_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = x
+                    img_rect.y = y
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                col_count+=1
+            row_count+=1
 
     def draw(self):
         for tile in self.tile_list:
             sc.blit(tile[0], tile[1])
-            pygame.draw.rect(sc, (255, 255, 255), tile[1], 2)
-
 
 class Spike:
     def __init__(self):
@@ -121,6 +129,7 @@ class Spike:
     def usespike(self):
         self.x = 1
 
+world = World(world_data)
 
 while True:
     for event in pygame.event.get():
@@ -130,6 +139,8 @@ while True:
             exit()
 
     keys = pygame.key.get_pressed()
+
+    world.draw()
 
     islerect = island.get_rect(bottomleft=(W // 2 + 200, H - 100))
     spikerect = spike.get_rect(bottomleft=(islerect.x+100, islerect.top))
@@ -362,8 +373,6 @@ while True:
     sc.blit(island, islerect)
     sc.blit(chickimage, hrect)
     sc.blit(spikeimage, spikerect)
-    world = World(world_data)
-    world.draw()
     draw_grid()
     pygame.display.update()
 
