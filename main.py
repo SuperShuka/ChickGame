@@ -1,5 +1,8 @@
 import pygame
 import ctypes
+from Spike import Spike
+from Spike import spikeslist
+from Chick import Chick
 from Wait import wait
 pygame.init()
 
@@ -11,27 +14,10 @@ sc = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
 pygame.display.set_caption('Chick Game')
 pygame.display.set_icon(pygame.image.load('Assets/Images/chickright.png'))
 
-chicksound = pygame.mixer.Sound('Assets/Sounds/Papapapapapa.mp3')
 pygame.mixer.music.load('Assets/Sounds/Grass.mp3')
 pygame.mixer.music.set_volume(0.3)
 skyimg = pygame.image.load('Assets/Images/sky.png').convert_alpha()
-chickleft = pygame.image.load('Assets/Images/chickleft.png').convert_alpha()
-chickright = pygame.image.load('Assets/Images/chickright.png').convert_alpha()
-chickjumpright = pygame.image.load('Assets/Images/chickjumpright.png').convert_alpha()
-chickjumpleft = pygame.image.load('Assets/Images/chickjumpleft.png').convert_alpha()
-chickrunleft1 = pygame.image.load('Assets/Images/chickrunleft1.png').convert_alpha()
-chickrunleft2 = pygame.image.load('Assets/Images/chickrunleft2.png').convert_alpha()
-chickrunright1 = pygame.image.load('Assets/Images/chickrunright1.png').convert_alpha()
-chickrunright2 = pygame.image.load('Assets/Images/chickrunright2.png').convert_alpha()
-flyleft1 = pygame.image.load('Assets/Images/chickflyleftst1.png').convert_alpha()
-flyleft2 = pygame.image.load('Assets/Images/chickflyleftst2.png').convert_alpha()
-flyleft3 = pygame.image.load('Assets/Images/chickflyleftst3.png').convert_alpha()
-flyright1 = pygame.image.load('Assets/Images/chickflyrightst1.png').convert_alpha()
-flyright2 = pygame.image.load('Assets/Images/chickflyrightst2.png').convert_alpha()
-flyright3 = pygame.image.load('Assets/Images/chickflyrightst3.png').convert_alpha()
 islepict = pygame.image.load('Assets/Images/testisland.png').convert_alpha()
-spikeimage = pygame.image.load('Assets/Images/spike.png').convert_alpha()
-dead = pygame.image.load('Assets/Images/Chickdeatheffect.png').convert_alpha()
 
 pygame.mixer.music.play(-1)
 
@@ -125,17 +111,6 @@ class World:
         for tile in self.tile_list:
             sc.blit(tile[0], tile[1])
             pygame.draw.rect(sc, (255, 255, 255), tile[1], 2)
-
-
-class Spike:
-    def __init__(self):
-        self.x = 150
-        self.y = 200
-        self.surf = pygame.Surface((33, 33))
-        self.image = pygame.image.load('Assets/Images/spike.png')
-
-    def usespike(self):
-        self.x = 1
 
 
 while True:
