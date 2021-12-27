@@ -76,7 +76,6 @@ class Chick(pygame.sprite.Sprite):
                 self.y = self.ground
                 self.yspeed = 0
             self.y -= self.yspeed
-
             "Движение по X "
         # ОБЕ НАЖАТЫ (Остановка)
         if keys[pygame.K_a] and keys[pygame.K_d]:
@@ -121,7 +120,7 @@ class Chick(pygame.sprite.Sprite):
             else:
                 if self.xspeed > -self.runspeed / 1.5:
                     self.xspeed -= self.acceleration / 2
-            chickturnr = False
+            self.chickturnr = False
         # НАПРАВО
         elif keys[pygame.K_d] and self.xspeed >= 0:
             if self.rect.bottom == self.ground:
@@ -137,12 +136,12 @@ class Chick(pygame.sprite.Sprite):
             else:
                 if self.xspeed < self.runspeed / 1.5:
                     self.xspeed += self.acceleration / 2
-            chickturnr = True
+            self.chickturnr = True
             # НЕ НАЖАТЫ (Остановка)
         else:
             if self.xspeed > 0:
                 if self.xspeed - self.acceleration <= 0:
-                    xspeed = 0
+                    self.xspeed = 0
                 else:
                     if self.rect.bottom == self.ground:
                         if self.on_ice:
@@ -155,7 +154,7 @@ class Chick(pygame.sprite.Sprite):
                         self.xspeed -= self.acceleration / 2
             else:
                 if self.xspeed + self.acceleration >= 0:
-                    xspeed = 0
+                    self.xspeed = 0
                 else:
                     if self.rect.bottom == self.ground:
                         if self.on_ice:
@@ -207,10 +206,10 @@ class Chick(pygame.sprite.Sprite):
                         self.chickimage = self.flyright2
                         self.flyanim += 1
                     elif 20 < self.flyanim <= 30:
-                        chickimage = self.flyright3
+                        self.chickimage = self.flyright3
                         self.flyanim += 1
                     elif 30 < self.flyanim < 35:
-                        chickimage = self.flyright2
+                        self.chickimage = self.flyright2
                         self.flyanim += 1
                     elif self.flyanim == 35:
                         self.flyanim = 1
@@ -219,13 +218,13 @@ class Chick(pygame.sprite.Sprite):
                         self.chickimage = self.flyleft1
                         self.flyanim += 1
                     elif 10 < self.flyanim <= 20:
-                        chickimage = self.flyleft2
+                        self.chickimage = self.flyleft2
                         self.flyanim += 1
                     elif 20 < self.flyanim <= 30:
-                        chickimage = self.flyleft3
+                        self.chickimage = self.flyleft3
                         self.flyanim += 1
                     elif 30 < self.flyanim < 35:
-                        chickimage = self.flyleft2
+                        self.chickimage = self.flyleft2
                         self.flyanim += 1
                     elif self.flyanim == 35:
                         self.flyanim = 1
@@ -243,5 +242,6 @@ class Chick(pygame.sprite.Sprite):
             self.image = self.chickjumpleft
         while self.y-50 <= H:
             self.y -= self.yspeed
+            exit()
 
 

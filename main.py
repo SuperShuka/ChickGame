@@ -58,8 +58,8 @@ while True:
 
     hero.update()
 
-    sc.blit(hero.image, hero.rect)
     sc.fill(LIGHT_BLUE)
+    sc.blit(hero.image, hero.rect)
     pygame.display.update()
 
     clock.tick(FPS)
