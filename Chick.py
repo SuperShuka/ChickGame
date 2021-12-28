@@ -26,7 +26,7 @@ class Chick(pygame.sprite.Sprite):
         self.chicksound = pygame.mixer.Sound('Assets/Sounds/Papapapapapa.mp3')
 
         self.chickimage = self.chickright
-        self.on_ice = 1
+        self.on_ice = 0
         self.xspeed = 0
         self.runspeed = 5
         self.yspeed = 0
@@ -233,6 +233,7 @@ class Chick(pygame.sprite.Sprite):
                     self.chickimage = self.chickjumpright
                 else:
                     self.chickimage = self.chickjumpleft
+        self.image = self.chickimage
 
     def die(self):
         self.yspeed = -3

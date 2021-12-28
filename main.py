@@ -47,6 +47,10 @@ x, y = int(x), int(y)
 loadcords.close()
 
 hero = Chick(x, y)
+spikeex = Spike(23, 65)
+spikeex = Spike(259, H-50)
+spikeex = Spike(593, 965)
+spikeex = Spike(1456, H-50)
 
 while True:
     for event in pygame.event.get():
@@ -59,7 +63,8 @@ while True:
     hero.update()
 
     sc.fill(LIGHT_BLUE)
-    sc.blit(hero.image, hero.rect)
+    sc.blit(hero.chickimage, hero.rect)
+    spikeslist.draw(sc)
     pygame.display.update()
 
     clock.tick(FPS)
