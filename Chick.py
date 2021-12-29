@@ -115,10 +115,10 @@ class Chick(pygame.sprite.Sprite):
                     if self.xspeed > -self.runspeed:
                         self.xspeed -= self.acceleration
             elif keys[pygame.K_SPACE]:
-                if self.xspeed > -self.runspeed / 2:
+                if self.xspeed > -self.runspeed / 1.5:
                     self.xspeed -= self.acceleration / 3
             else:
-                if self.xspeed > -self.runspeed / 1.5:
+                if self.xspeed > -self.runspeed / 1.25:
                     self.xspeed -= self.acceleration / 2
             self.chickturnr = False
         # НАПРАВО
@@ -131,10 +131,10 @@ class Chick(pygame.sprite.Sprite):
                     if self.xspeed < self.runspeed:
                         self.xspeed += self.acceleration
             elif keys[pygame.K_SPACE]:
-                if self.xspeed < self.runspeed / 2:
+                if self.xspeed < self.runspeed / 1.5:
                     self.xspeed += self.acceleration / 3
             else:
-                if self.xspeed < self.runspeed / 1.5:
+                if self.xspeed < self.runspeed / 1.25:
                     self.xspeed += self.acceleration / 2
             self.chickturnr = True
             # НЕ НАЖАТЫ (Остановка)
@@ -236,13 +236,6 @@ class Chick(pygame.sprite.Sprite):
         self.image = self.chickimage
 
     def die(self):
-        self.yspeed = -3
-        if self.chickturnr:
-            self.image = self.chickjumpright
-        else:
-            self.image = self.chickjumpleft
-        while self.y-50 <= H:
-            self.y -= self.yspeed
-            exit()
+        self.y += 3
 
 

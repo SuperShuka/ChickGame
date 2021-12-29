@@ -12,3 +12,4 @@ class Spike(pygame.sprite.Sprite):
         self.image = pygame.image.load('Assets/Images/spike.png').convert_alpha()
         self.rect = self.image.get_rect(bottomleft=(self.x, self.y))
         self.add(spikeslist)
+
