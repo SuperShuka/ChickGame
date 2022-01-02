@@ -16,15 +16,15 @@ class Button(pygame.sprite.Sprite):
         self.y = H//4 + 86*(self.num-1)
         self.font = pygame.font.SysFont('comicsansms', 36)
         pygame.sprite.Sprite.__init__(self)
-        self.image = self.font.render(self.text, 1, BLACK)
+        self.image = self.font.render(self.text, True, BLACK)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
         self.add(group)
 
     def update(self, curnum):
         if curnum == self.num:
-            self.image = self.font.render(self.text, 1, WHITE, BLACK)
+            self.image = self.font.render(self.text, True, WHITE, BLACK)
         else:
-            self.image = self.font.render(self.text, 1, BLACK)
+            self.image = self.font.render(self.text, True, BLACK)
 
 
 class Slider(pygame.sprite.Sprite):
@@ -35,5 +35,11 @@ class Slider(pygame.sprite.Sprite):
         self.x = W - 500
         self.y = H // 4 + 86 * (self.num - 1)
         self.surf = pygame.Surface((350, 36))
+        pygame.sprite.Sprite.__init__(self)
         self.image = self.surf
         self.rect = self.surf.get_rect(topleft=(self.x, self.y))
+
+    def update(self, value):
+        None
+
+
