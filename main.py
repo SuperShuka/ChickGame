@@ -4,6 +4,7 @@ from Spike import Spike
 from Chick import Chick
 from Wait import wait
 from ButtonTypes import Button
+from Videos import secret_clip
 import Saving
 pygame.init()
 
@@ -43,13 +44,14 @@ mainButts_Group = pygame.sprite.Group()
 settingButts_Group = pygame.sprite.Group()
 settings_sliders_Group = pygame.sprite.Group()
 
-x, y = W//2, H-50
+x, y = W//2,  H-50
 hero = Chick(x, y)
 
 makeSpike = Spike(23, 65, spikes_Group)
 makeSpike = Spike(259, H - 50, spikes_Group)
 makeSpike = Spike(593, H - 95, spikes_Group)
 makeSpike = Spike(1256, H - 50, spikes_Group)
+spikes_rect_list = []
 
 play_button = Button(mainButts_Group, 'Играть!', 1)
 settings_button = Button(mainButts_Group, 'Настройки', 2)
@@ -64,6 +66,9 @@ music_volume_slider_exist = soundeffect_volume_slider_exist = False
 level = pygame.Surface((W, H))
 level.blit(skyimg, (0, 0))
 spikes_Group.draw(level)
+
+for spike in spikes_Group:
+    spikes_rect_list.append(spike.rect)
 
 
 def game_draw():
@@ -113,6 +118,14 @@ while True:
                     title = titleFont.render('Главное меню', True, BLACK)
                     mode = 'Main Menu'
                     break
+        for spike in spikes_Group:
+            if hero.rect.colliderect(spike.rect):
+                curbutt_num = 1
+                title = titleFont.render('Главное меню', True, BLACK)
+                mode = 'Main Menu'
+                hero.x, hero.y = W // 2, H - 50
+                print('die')
+                break
         game_draw()
         clock.tick(FPS)
     """Главное меню"""
@@ -172,7 +185,7 @@ while True:
                     if soundeffect_volume_setts_button.num == curbutt_num:
                         soundeffect_volume_slider_exist = True
                     if secret_button.num == curbutt_num:
-                        exit()
+                        secret_clip.preview()
         if music_volume_slider_exist:
             wait(1)
             musicvolume_setts_button.kill()
