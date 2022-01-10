@@ -235,7 +235,3 @@ class Chick(pygame.sprite.Sprite):
                     self.chickimage = self.chickjumpleft
         self.image = self.chickimage
 
-    def die(self):
-        self.y += 3
-
-
