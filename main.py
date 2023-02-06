@@ -184,8 +184,6 @@ while True:
                         music_volume_slider_exist = True
                     if soundeffect_volume_setts_button.num == curbutt_num:
                         soundeffect_volume_slider_exist = True
-                    if secret_button.num == curbutt_num:
-                        secret_clip.preview()
         if music_volume_slider_exist:
             wait(1)
             musicvolume_setts_button.kill()
