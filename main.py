@@ -4,7 +4,6 @@ from Spike import Spike
 from Chick import Chick
 from Wait import wait
 from ButtonTypes import Button
-from Videos import secret_clip
 import Saving
 pygame.init()
 
